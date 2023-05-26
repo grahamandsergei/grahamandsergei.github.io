@@ -299,7 +299,7 @@ h1, h2, h3, h4, h5, h6, figure {
   height: 1200px;
   background-size: cover;
   background-repeat: no-repeat;
-  position: center; /*relative*/
+  position: relative;
   width: 100%;
 }
 .fh5co-cover .overlay {
