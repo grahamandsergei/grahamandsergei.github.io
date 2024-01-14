@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="bootstrap.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Slick JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="bootstrap.min.js"></script>
+	
+		<!-- Include Quill stylesheet -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<!-- Include Quill library -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> 
+
+	<style>
+ 
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+			flex-wrap: wrap;
+        }
+		
+		.navbar{
+			height: 10vh;
+			margin-bottom: 0px;
+		}
+
+        .column {
+            width: 43%;
+            overflow-y: auto;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+			scrollbar-width: none;
+        }
+		
+		#stack-left-column {
+		    background-color: #eee;
+            padding: 10px;
+		
+		}
+
+        #left-column {
+            background-color: #eee;
+        }
+
+        #right-column {
+			background-color: #ffffff;
+			align-items: left;
+			justify-content: flex-start;
+			overflow-y: auto;
+		}
+
+		#buttons-column {
+		display: flex;
+		background-color: #ffffff;
+		width: 14%;
+		height: 90vh;
+		overflow-y: auto;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		scrollbar-width: none;
+		}
+
+.shape {
+    margin-left: 10px;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    flex-direction: column;
+}
+
+.circle {
+    min-height: 150px;
+    font-size: 18pt;
+    font-family: 'Times New Roman', serif;
+    color: #ffffff;
+    background-color: #a80050;
+    margin-left: 10px;
+}
+
+.placeholderRedCircle {
+    width: 95%; /* Responsive width, adjusted from 100% to account for margin */
+    font-size: 18pt;
+    font-family: 'Times New Roman', serif;
+    color: #ffffff;
+    margin-left: 5%;
+	margin-right: 5%;
+    word-wrap: break-word; /* Ensure text wraps inside the div */
+}
+		
+.textarea-container-three {
+    position: relative; /* This sets the positioning context for the absolute elements inside */
+    padding-top: 10px; /* This padding-top ensures that there's space for the buttons to overflow the <p> element */
+    font-family: 'Arial', sans-serif;
+}
+
+		
+		.textarea-container {
+            position: relative;
+			display: block; 
+			margin-top: 20px;
+        }
+
+        textarea, #secondtextarea, #thirdtextarea {
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 10px;
+			resize: vertical;
+        }
+		
+		input {
+			width: 50%;
+		}
+
+.button {
+    position: relative;
+    background: linear-gradient(45deg, #a70050, blue);
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: white;
+    font-family: 'Arial', sans-serif;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    overflow: hidden; /* Ensure the pseudo-element doesn't exceed the button boundaries */
+    transition: box-shadow 0.3s ease; /* Transition for the shadow */
+    z-index: 1; /* Ensure the button is above the pseudo-element */
+}
+
+.button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, blue, #a70050);
+    opacity: 0;
+    border-radius: inherit; /* Match the border radius of the button */
+    transition: opacity 1s ease; /* Transition for the background */
+    z-index: -1; /* Place it behind the button's text */
+}
+
+.button:hover::before {
+    opacity: 1;
+}
+
+.button:hover {
+    box-shadow: 0 6px 8px rgba(0,0,0,1); /* Enhanced shadow on hover */
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Changed to 'center' to ensure buttons are centered and margins are consistent */
+    justify-content: center;
+	margin-bottom: 20px;
+}
+
+.button-container .button {
+    /* Using 'flex: none' to disable the flex grow/shrink properties */
+    flex: none;
+    /* Fixed width for three-column layout */
+    width: 90%;
+    /* Fixed margin for consistency */
+    margin: 5px;
+}
+
+/* This media query will stack buttons into one column on smaller screens */
+@media (max-width: 768px) {
+    .button-container .button {
+        /* Full width for the button */
+        width: 90%;
+        /* Reset margins for a single column layout */
+        margin: 5px 0;
+    }
+}
+
+.template-container {
+  display: flex;
+  justify-content: space-between; /* Space between the template button and the trash icon */
+  margin-bottom: 5px; /* Margin between template items */
+  align-items: center;
+  padding: 0 10px 0 10px;
+}
+
+.template-button {
+  flex-grow: 1; /* Allow the button to grow and fill the space */
+  margin-right: 4px; /* Space between button and trash icon */
+  text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+  overflow: hidden; /* Hide overflow */
+  white-space: nowrap; /* Prevent wrapping to a new line */
+	position: relative;
+    background: linear-gradient(45deg, #a70050, yellow);
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: white;
+    font-family: 'Arial', sans-serif;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    overflow: hidden; /* Ensure the pseudo-element doesn't exceed the button boundaries */
+    transition: box-shadow 0.3s ease; /* Transition for the shadow */
+    z-index: 1; /* Ensure the button is above the pseudo-element */
+}
+.selected-template-button {
+    position: relative;
+    background: linear-gradient(45deg, #a70050, blue);
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: white;
+    font-family: 'Arial', sans-serif;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    overflow: hidden; /* Ensure the pseudo-element doesn't exceed the button boundaries */
+    transition: box-shadow 0.3s ease; /* Transition for the shadow */
+    z-index: 1; /* Ensure the button is above the pseudo-element */
+}
+
+.fas.fa-trash {
+  padding: 5px; /* Padding around the trash icon */
+  margin-left: 4px; /* Space between button and trash icon */
+}
+
+.fas.fa-edit {
+  padding: 5px; /* Padding around the trash icon */
+  margin-left: 4px; /* Space between button and trash icon */
+}
+
+       /* Existing styles */
+		body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.selected-template-button {
+    background-color: #4CAF50; /* or any color you prefer */
+    /* add other styles if needed */
+}
+
+</style>
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<script type="module">
+
+const templateCache = {};
+
+  // Import the necessary functions from Firebase SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, doc, setDoc, updateDoc, collection, deleteDoc} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  
+
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDDaU-zKXNTQUHsL8PQOduxeQcOuYql9Zs",
+    authDomain: "authentication-app-21e51.firebaseapp.com",
+    databaseURL: "https://authentication-app-21e51-default-rtdb.firebaseio.com",
+    projectId: "authentication-app-21e51",
+    storageBucket: "authentication-app-21e51.appspot.com",
+    messagingSenderId: "247019866345",
+    appId: "1:247019866345:web:2c3e0873cd40ce42084878"
+  };
+
+	// Initialize Firebase
+	const app = initializeApp(firebaseConfig);
+	const auth = getAuth();
+	const db = getFirestore();
+	
+const prefetchTemplates = async () => {
+  if (!auth.currentUser) return;
+
+  const templatesRef = collection(db, "users", auth.currentUser.uid, "templates");
+  const querySnapshot = await getDocs(templatesRef);
+
+  querySnapshot.forEach(doc => {
+    const templateData = doc.data();
+    templateCache[doc.id] = {
+      leftColumn: templateData.leftColumn,
+      rightColumn: templateData.rightColumn,
+      name: templateData.name
+    };
+  });
+};
+
+function debounce(func, wait) {
+  let timeout;
+
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+	let currentTemplateId;
+
+    const generateTemplateId = () => {
+    // Ensure that this function generates a valid Firestore document ID
+    return doc(collection(db, 'users', auth.currentUser.uid, 'templates')).id;
+	};
+
+const saveTemplate = async () => {
+  if (auth.currentUser && currentTemplateId) {
+    // Fetch current template name from the corresponding button in the UI
+    const templateButton = document.querySelector(`[data-template-id="${currentTemplateId}"]`);
+    const currentTemplateName = templateButton ? templateButton.textContent : 'New Template';
+
+    // Update value attributes before saving innerHTML for inputs and textareas
+    const inputs = document.getElementById("left-column").querySelectorAll("input[type='text']");
+    inputs.forEach(input => {
+      input.setAttribute('value', input.value);
+    });
+
+    const textareas = document.getElementById("left-column").querySelectorAll("textarea");
+    textareas.forEach(textarea => {
+      textarea.textContent = textarea.value;
+    });
+
+    // Now capture the innerHTML
+    const leftColumnHtml = document.getElementById("left-column").innerHTML;
+    const rightColumnHtml = document.getElementById("right-column").innerHTML;
+
+    const templateDocRef = doc(db, "users", auth.currentUser.uid, "templates", currentTemplateId);
+    try {
+      await setDoc(templateDocRef, {
+        name: currentTemplateName, // Save the template name
+        leftColumn: leftColumnHtml,
+        rightColumn: rightColumnHtml,
+        createdAt: Date.now() // Add the current timestamp here
+      });
+      console.log("Template saved successfully");
+    } catch (error) {
+      console.error("Error saving template: ", error);
+    }
+  }
+};
+
+  
+  const renameTemplate = async (templateId, templateButton) => {
+  const newName = prompt("Enter new template name:", templateButton.textContent);
+  if (newName) {
+    templateButton.textContent = newName; // Update button text
+    // Save new name to Firestore
+    const templateRef = doc(db, "users", auth.currentUser.uid, "templates", templateId);
+    try {
+      await updateDoc(templateRef, { name: newName });
+      console.log("Template name updated successfully");
+    } catch (error) {
+      console.error("Error updating template name: ", error);
+    }
+  }
+};
+
+  
+  // Function to delete template both from Firestore and the UI
+const deleteTemplate = async (templateId, templateContainer) => {
+  if (templateId === currentTemplateId) {
+    document.getElementById("right-column").innerHTML = '';
+    document.getElementById("left-column").innerHTML = '';
+    currentTemplateId = null; // Clear the current template ID
+  }
+
+  const templateRef = doc(db, "users", auth.currentUser.uid, "templates", templateId);
+  try {
+    await deleteDoc(templateRef);
+    templateContainer.remove();
+    console.log("Template deleted successfully");
+    await fetchAndDisplayTemplates(); // Fetch templates again to update the UI
+  } catch (error) {
+    console.error("Error deleting template: ", error);
+  }
+};
+
+// Function to create a template button with a kebab menu
+function createTemplateItem(templateId, templateName) {
+  const templateContainer = document.createElement("div");
+  templateContainer.className = "template-container";
+
+  const templateButton = document.createElement("button");
+   templateButton.textContent = templateName;
+  templateButton.className = "template-button"; // Assign a class for styling if needed
+  templateButton.dataset.templateId = templateId; // Set a data attribute
+  templateButton.addEventListener("click", () => debouncedLoadTemplate(templateId));
+
+const editButton = document.createElement("button");
+editButton.className = "fas fa-edit";
+editButton.addEventListener("click", () => renameTemplate(templateId, templateButton));
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "fas fa-trash"; // Use Font Awesome class for the trash icon
+  deleteButton.addEventListener("click", () => {
+    if (confirm('Are you sure you want to delete this template?')) {
+      deleteTemplate(templateId, templateContainer);
+    }
+  });
+
+  templateContainer.appendChild(templateButton);
+  templateContainer.appendChild(editButton);
+  templateContainer.appendChild(deleteButton); // Append the trash icon button
+
+  return templateContainer;
+}
+
+
+// Function to append a new template item to the buttons column
+function appendNewTemplateItem(templateId, templateName) {
+  const buttonsColumn = document.getElementById("buttons-column");
+  const templateItem = createTemplateItem(templateId, templateName);
+  buttonsColumn.appendChild(templateItem);
+}
+
+
+// Function to clear only the template buttons from the UI
+function clearTemplateButtons() {
+  const existingTemplateContainers = document.querySelectorAll('.template-container');
+  existingTemplateContainers.forEach(container => container.remove());
+}
+
+
+// Fetch and display user's templates
+const fetchAndDisplayTemplates = async () => {
+  const templatesRef = collection(db, "users", auth.currentUser.uid, "templates");
+  const querySnapshot = await getDocs(templatesRef);
+  
+  const buttonsColumn = document.getElementById("buttons-column");
+  clearTemplateButtons(); // Clear existing template buttons before adding new ones
+  
+  // Append each fetched template item
+  querySnapshot.docs.forEach(doc => {
+    const templateId = doc.id;
+    const templateName = doc.data().name || 'New Template'; // Default to 'New Template' if name not set
+    appendNewTemplateItem(templateId, templateName);
+  });
+};
+
+const loadTemplate = async (templateId) => {
+  // Check if the selected template is already active
+  if (templateId === currentTemplateId) {
+    console.log("This template is already active.");
+    return; // Exit the function if the template is already active
+  }
+
+  // Save the current template before loading another one
+  if (currentTemplateId) {
+    await saveTemplate();
+  }
+
+  // Check if the template data is available in the cache
+  if (templateCache[templateId]) {
+    const templateData = templateCache[templateId];
+    document.getElementById("left-column").innerHTML = templateData.leftColumn;
+    document.getElementById("right-column").innerHTML = templateData.rightColumn;
+    currentTemplateId = templateId; // Update current template ID
+    updateActiveTemplateButton(templateId);
+    reinitializeInteractiveElements();
+    console.log("Template loaded from cache");
+  } else {
+    // If not in cache, fetch from Firestore
+    const templateRef = doc(db, "users", auth.currentUser.uid, "templates", templateId);
+    const docSnap = await getDoc(templateRef);
+
+    if (docSnap.exists()) {
+      const templateData = docSnap.data();
+      document.getElementById("left-column").innerHTML = templateData.leftColumn;
+      document.getElementById("right-column").innerHTML = templateData.rightColumn;
+      currentTemplateId = templateId; // Update current template ID
+      updateActiveTemplateButton(templateId);
+      reinitializeInteractiveElements();
+    } else {
+      console.log("No such template!");
+    }
+  }
+};
+
+const debouncedLoadTemplate = debounce(loadTemplate, 500);
+// Helper function to update UI for active template button
+const updateActiveTemplateButton = (activeTemplateId) => {
+  const templateButtons = document.querySelectorAll('.template-button');
+  templateButtons.forEach(button => {
+    if (button.dataset.templateId === activeTemplateId) {
+      button.classList.add('active-template-button'); // Add a class to indicate active status
+    } else {
+      button.classList.remove('active-template-button');
+    }
+  });
+};
+
+function reinitializeInteractiveElements() {
+  // Re-bind event listeners to all interactive elements
+  // We will find the text areas and input fields by class names and id patterns
+  const leftColumn = document.getElementById("left-column");
+  const rightColumn = document.getElementById("right-column");
+
+  // Reinitialize textareas and inputs
+  const textareas = leftColumn.querySelectorAll('textarea');
+  const inputs = leftColumn.querySelectorAll("input[type='text']");
+
+  textareas.forEach(textarea => {
+    textarea.addEventListener("input", function() {
+      // We need to find the corresponding placeholder in the right column by matching the numeric part of the id
+      const correspondingId = textarea.id.match(/\d+/)[0]; // This extracts the number from the id
+      const rightColumnPlaceholder = rightColumn.querySelector(`#secondplaceholder${correspondingId}`);
+      if (rightColumnPlaceholder) {
+        rightColumnPlaceholder.innerText = textarea.value;
+        updateTemplateContent(`shape${correspondingId}.secondPlaceholder`, textarea.value);
+      }
+      saveTemplate();
+    });
+  });
+
+  inputs.forEach(input => {
+    input.addEventListener("input", function() {
+      // Similar to textareas, match the input id with the placeholder in the right column
+      const correspondingId = input.id.match(/\d+/)[0];
+      const rightColumnPlaceholder = rightColumn.querySelector(`#firstplaceholder${correspondingId}`);
+      if (rightColumnPlaceholder) {
+        rightColumnPlaceholder.innerText = input.value;
+        updateTemplateContent(`shape${correspondingId}.firstPlaceholder`, input.value);
+      }
+      saveTemplate();
+    });
+  });
+
+  // Add any additional reinitialization logic for other interactive elements as necessary
+}
+
+// Helper function to update the content in Firestore
+async function updateTemplateContent(contentId, contentValue) {
+  if (auth.currentUser && currentTemplateId) {
+    const templateDocRef = doc(db, "users", auth.currentUser.uid, "templates", currentTemplateId);
+    let updates = {};
+    updates[contentId] = contentValue;
+
+    try {
+      await updateDoc(templateDocRef, updates);
+      console.log("Content updated");
+    } catch (error) {
+      console.error("Error updating content: ", error);
+    }
+  }
+}
+
+function reinitializeShapesAndTextareas() {
+  const rightColumn = document.getElementById("right-column");
+  const leftColumn = document.getElementById("left-column");
+
+  // Iterate over shapes in the right column
+  rightColumn.querySelectorAll('.shape').forEach((shape, index) => {
+    const shapeId = shape.id;
+    const shapeClass = shape.classList.contains("circle") ? "circle" : "other"; // Adapt as needed for other shapes
+    const color = shape.style.backgroundColor; // Or any other method to determine the color
+
+    // Now find corresponding textareas in the left column
+    const textareaContainer = leftColumn.querySelector(`#textarea-container${index + 1}`);
+    if (textareaContainer) {
+      const firstTextarea = textareaContainer.querySelector(`#firsttextarea${index + 1}`);
+      const secondTextarea = textareaContainer.querySelector(`#secondtextarea${index + 1}`);
+      if (firstTextarea && secondTextarea) {
+        // Reattach event listeners to these textareas
+        firstTextarea.addEventListener("input", function() {
+          // Your existing input event logic here
+        });
+        secondTextarea.addEventListener("input", function() {
+          // Your existing input event logic here
+        });
+      }
+    }
+
+    // Additional setup as required for each shape
+  });
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    document.getElementById('logout').style.display = 'block';
+    
+    // Prefetch and cache templates
+    await prefetchTemplates();
+
+    // Fetch and display existing templates
+    await fetchAndDisplayTemplates();
+
+    // Additional logic if needed, e.g., load a specific template
+  } else {
+    document.getElementById('logout').style.display = 'none';
+    // Handle the case when the user is not logged in
+  }
+});
+
+
+  // Logout code
+  document.getElementById("logout").addEventListener("click", function() {
+  
+      signOut(auth).then(() => {
+          // Sign-out successful.
+          console.log('Sign-out successful.');
+          alert('Sign-out successful.');
+          // Redirect to login page or perform other actions post sign-out
+          window.location.href = 'https://grahamandsergei.github.io/app/signup.html'; // Replace with your login page URL
+      }).catch((error) => {
+          // An error happened.
+          console.log('An error happened.');
+      });              
+  });
+
+        document.addEventListener("DOMContentLoaded", function() {
+		
+    const newTemplateButton = document.getElementById("newTemplateButton");
+	
+	// Define clearTemplate function outside of setupTemplateButtons since it's no longer needed
+const clearTemplate = async () => {
+  document.getElementById("right-column").innerHTML = '';
+  document.getElementById("left-column").innerHTML = '';
+
+// Reset the style of all template buttons
+    const templateButtons = document.querySelectorAll('.template-button');
+    templateButtons.forEach(button => {
+        button.classList.remove('selected-template-button');
+    });
+
+    // Create new template
+    const newTemplateId = generateTemplateId();
+    currentTemplateId = newTemplateId;
+    await saveTemplate();
+
+    // Append the new template item with kebab menu
+    appendNewTemplateItem(newTemplateId); 
+
+    // Apply selected style to the new template button
+    const newTemplateButton = document.querySelector(`[data-template-id="${newTemplateId}"]`);
+    if (newTemplateButton) {
+        newTemplateButton.classList.add('selected-template-button');
+    }
+
+    // Load the new template
+    loadTemplate(newTemplateId); 
+};
+
+newTemplateButton.addEventListener('click', clearTemplate);
+	
+            const rightColumn = document.getElementById("right-column");
+            let uniqueIdCounter = 1;
+			
+
+            function createShape(shapeClass, text, color, isBanner) {
+                const shapeContainer = document.createElement("div");
+                shapeContainer.id = `shape${uniqueIdCounter}`;
+                shapeContainer.className = "shape " + shapeClass;
+
+				if (shapeClass === "circle") {
+                    const firstPlaceholder = document.createElement("div");
+                    firstPlaceholder.id = `firstplaceholder${uniqueIdCounter}`;
+                    firstPlaceholder.className = "placeholderRedCircle";
+                    firstPlaceholder.innerText = "Course Title";
+
+                    const secondPlaceholder = document.createElement("div");
+                    secondPlaceholder.id = `secondplaceholder${uniqueIdCounter}`;
+                    secondPlaceholder.className = "placeholderRedCircle";
+                    secondPlaceholder.innerText = "Course Details";
+
+                    // Apply different styles to first and second placeholders
+                    firstPlaceholder.style.fontSize = "24pt"; // Updated the font size
+                    secondPlaceholder.style.fontSize = "16pt"; // Adjust the size as needed
+
+                    shapeContainer.appendChild(firstPlaceholder);
+                    shapeContainer.appendChild(secondPlaceholder);
+
+                    firstPlaceholder.style.backgroundColor = color;
+					firstPlaceholder.style.marginTop = "35px";
+                    secondPlaceholder.style.backgroundColor = color;
+					secondPlaceholder.style.marginBottom = "10px";
+					
+					}
+
+                return shapeContainer;
+            }
+
+			// Create hidden elements to store input values for saving to innerHTML
+    const hiddenFirstInput = document.createElement("span");
+    hiddenFirstInput.style.display = "none";
+    hiddenFirstInput.id = `hiddenFirstInput${uniqueIdCounter}`;
+
+    const hiddenSecondInput = document.createElement("span");
+    hiddenSecondInput.style.display = "none";
+    hiddenSecondInput.id = `hiddenSecondInput${uniqueIdCounter}`;
+	
+            function createTextarea(container, shape, firstPlaceholder, secondPlaceholder, isBanner) {
+                const textareaContainer = document.createElement("div");
+                textareaContainer.id = `textarea-container${uniqueIdCounter}`;
+                textareaContainer.className = "textarea-container-three";
+                textareaContainer.style.display = "none";
+				textareaContainer.style.marginTop = "20px";
+				
+				if (shape.classList.contains("circle")) {
+                    const firstPElement = document.createElement("p");
+                    firstPElement.innerText = "Course Title";
+					firstPElement.style.fontFamily = "Impact,Charcoal,sans-serif";
+
+                    const firstTextarea = document.createElement("input");
+						firstTextarea.style.width = "100%";
+						firstTextarea.style.marginBottom = "5px";
+						firstTextarea.type = 'text';
+						firstTextarea.id = `firsttextarea${uniqueIdCounter}`;
+						firstTextarea.placeholder = "e.g. DM999 Digital Marketing";
+						firstTextarea.addEventListener("input", function() {
+						  firstPlaceholder.innerText = firstTextarea.value || "Course Title";
+						  // Update the value attribute so it's included in innerHTML
+						  firstTextarea.setAttribute('value', firstTextarea.value);
+						updateTemplateContent(auth.currentUser.uid, `shape${uniqueIdCounter}.firstPlaceholder`, firstTextarea.value);
+                    saveTemplate(); // Call saveTemplate to save after each change.
+});
+
+						const secondTextarea = document.createElement("textarea");
+						secondTextarea.id = `secondtextarea${uniqueIdCounter}`;
+						secondTextarea.placeholder = "e.g. Undergraduate, 2024-25";
+						secondTextarea.addEventListener("input", function() {
+						  secondPlaceholder.innerText = secondTextarea.value || "Course Details";
+						  // Update the text content so it's included in innerHTML
+						  secondTextarea.textContent = secondTextarea.value;
+						updateTemplateContent(auth.currentUser.uid, `shape${uniqueIdCounter}.secondPlaceholder`, secondTextarea.value);
+                    saveTemplate(); // Call saveTemplate to save after each change.
+});
+	
+                    textareaContainer.appendChild(firstPElement);
+                    textareaContainer.appendChild(firstTextarea);
+                    textareaContainer.appendChild(secondTextarea);
+				
+				}
+
+			container.appendChild(textareaContainer);
+			return textareaContainer;
+		}
+
+				function addButtonClickListener(button, container, shapeClass, placeholder, color, isBanner = false) {
+    button.addEventListener("click", async function() {
+        const shape = createShape(shapeClass, placeholder, color, isBanner);
+        rightColumn.appendChild(shape);
+
+        if (shapeClass === "circle") {
+            const firstPlaceholder = shape.querySelector(`#firstplaceholder${uniqueIdCounter}`);
+            const secondPlaceholder = shape.querySelector(`#secondplaceholder${uniqueIdCounter}`);
+            const textareaContainer = createTextarea(container, shape, firstPlaceholder, secondPlaceholder);
+            textareaContainer.style.display = "block";
+        }
+
+        uniqueIdCounter++;
+		await saveTemplate();
+    });
+}
+const addRedButton = document.getElementById("addRedButton");
+    // Now call the addButtonClickListener function with the correct parameters
+   addButtonClickListener(addRedButton, document.getElementById("left-column"), "circle", "Desc", "#a80050");
+
+});
+    </script>
+	
+	
+</head>
+<body>
+
+<div class="navbar navbar-default" style="width:100%; margin-bottom: 0px">
+<div class="navbar-header">
+  <a class="navbar-brand" href="https://www.sergeimedvedev.com">TheApp</a>
+  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false" aria-controls="navbar">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+  </button>
+</div>
+<div class="navbar-collapse collapse"  >
+    <ul class="nav navbar-nav navbar-right">
+         <li><a href="#" id="logout" style="display: none;">Log Out</a></li>
+    </ul>
+</div>
+</div>
+    <div id="buttons-column">
+		<div class="button-container">
+			<button class="button" id="addRedButton" style="margin-top: 10px;">Title</button>
+			<button class="button" id="newTemplateButton">New Template</button>
+		</div>
+	</div>
+	<div id="stack-left-column" class="column">
+		<div id="template-title">
+		</div>
+		<div id="left-column">
+		</div>
+    </div>
+
+    <div id="right-column" class="column"></div>
+
+    <script src="js/bootstrap.min.js"></script>
+
+
+
+</body>
+</html>
